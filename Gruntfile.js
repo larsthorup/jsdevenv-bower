@@ -60,9 +60,6 @@ module.exports = function (grunt) {
 
 
     // bundle
-    grunt.loadNpmTasks('grunt-contrib-copy');
-    gruntConfig.copy = {
-    };
     grunt.loadNpmTasks('grunt-contrib-requirejs');
     gruntConfig.requirejs = {
 
@@ -101,10 +98,17 @@ module.exports = function (grunt) {
             updateConfigs: ['pkg']
         }
     };
+    grunt.loadNpmTasks('grunt-contrib-copy');
+    gruntConfig.copy = {
+        release: { files: [
+            { cwd: '.', src: ['bower.json', 'LICENSE'], dest: 'output/release', expand: true },
+            { cwd: 'output/dist', src: ['**/*'], dest: 'output/release', expand: true }
+        ] }
+    };
     grunt.loadNpmTasks('grunt-shell');
     gruntConfig.shell = {
         cloneRelease: {
-            command: '(rm -rf output/release && git clone https://github.com/larsthorup/jsdevenv-require-bower.git output/release)'
+            command: '(rm -rf output/release && git clone https://github.com/larsthorup/jsdevenv-bower-release.git output/release)'
         },
         commitRelease: {
             // ToDo: how to remove files no longer there?

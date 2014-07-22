@@ -1,5 +1,6 @@
 {
     "name": "jsdevenv-bower",
+    "version": "0.1.2",
     "private": true,
     "description": "",
     "repository": {
