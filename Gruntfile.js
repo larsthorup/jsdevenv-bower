@@ -10,6 +10,55 @@ module.exports = function (grunt) {
     grunt.registerTask('default', []);
 
 
+    // test
+    grunt.loadNpmTasks('grunt-karma');
+    gruntConfig.karma = {
+        options: {
+            basePath: '.',
+            frameworks: ['mocha', 'requirejs'],
+            files: [
+                'src/test/karma-test-main.js',
+                'src/test/bind.js', // Note: polyfill for the benefit of less on Phantom
+                {pattern: 'src/**/*.*', included: false},
+                {pattern: 'bower_components/**/*.js', included: false}
+            ],
+            coverageReporter: {
+                reporters: [
+                    {type: 'lcov'},
+                    {type: 'html'},
+                    {type: 'cobertura'},
+                    {type: 'text-summary'}
+                ],
+                dir: 'output/coverage'
+            },
+            port: 9876, // Note: web server port
+            colors: true, // Note: enable / disable colors in the output (reporters and logs)
+            logLevel: grunt.option('verbose') ? 'DEBUG' : 'INFO'
+        }
+    };
+    gruntConfig.karma.test = {
+        reporters: ['progress'],
+        browsers: ['PhantomJS'],
+        autoWatch: false,
+        singleRun: true
+    };
+    grunt.registerTask('test', ['karma:test']);
+
+
+    // cover
+    gruntConfig.karma.cover = {
+        preprocessors: {
+            // Note: instrument all code files, but not test files
+            'src/app/**/!(*test).js': ['coverage']
+        },
+        reporters: ['progress', 'coverage'],
+        browsers: ['PhantomJS'],
+        autoWatch: false,
+        singleRun: true
+    };
+    grunt.registerTask('cover', ['karma:cover']);
+
+
     // bundle
     grunt.loadNpmTasks('grunt-contrib-copy');
     gruntConfig.copy = {
@@ -59,56 +108,6 @@ module.exports = function (grunt) {
         }
     };
     grunt.registerTask('bundle', ['copy:dist', 'requirejs']);
-
-
-    // test
-    grunt.loadNpmTasks('grunt-karma');
-    gruntConfig.karma = {
-        options: {
-            basePath: '.',
-            frameworks: ['mocha', 'requirejs'],
-            files: [
-                'src/test/karma-test-main.js',
-                'src/test/bind.js', // Note: polyfill for the benefit of less on Phantom
-                {pattern: 'src/**/*.*', included: false},
-                {pattern: 'bower_components/**/*.js', included: false}
-            ],
-            coverageReporter: {
-                reporters: [
-                    {type: 'lcov'},
-                    {type: 'html'},
-                    {type: 'cobertura'},
-                    {type: 'text-summary'}
-                ],
-                dir: 'output/coverage'
-            },
-            port: 9876, // Note: web server port
-            colors: true, // Note: enable / disable colors in the output (reporters and logs)
-            // logLevel: 'DEBUG'
-            logLevel: 'INFO'
-        }
-    };
-    gruntConfig.karma.test = {
-        reporters: ['progress'],
-        browsers: ['PhantomJS'],
-        autoWatch: false,
-        singleRun: true
-    };
-    grunt.registerTask('test', ['karma:test']);
-
-
-    // cover
-    gruntConfig.karma.cover = {
-        preprocessors: {
-            // Note: instrument all code files, but not test files
-            'src/app/**/!(*test).js': ['coverage']
-        },
-        reporters: ['progress', 'coverage'],
-        browsers: ['PhantomJS'],
-        autoWatch: false,
-        singleRun: true
-    };
-    grunt.registerTask('cover', ['karma:cover']);
 
 
     // release
