@@ -79,7 +79,7 @@ module.exports = function (grunt) {
         // Note: bundle the "main" module and every module referenced recursively by it
         module: {
             options: {
-                name: 'lib/newsfeed',
+                name: 'newsfeed/newsfeed',
                 out: 'output/dist/newsfeed.js',
 
                 // Note: "text" and "less" modules not used in production as all text and css is bundled

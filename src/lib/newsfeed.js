@@ -1,7 +1,7 @@
 define(function (require) {
     require('jquery');
-    require('less!lib/newsfeed');
-    var template = require('text!lib/newsfeed.html');
+    require('less!newsfeed/newsfeed');
+    var template = require('text!newsfeed/newsfeed.html');
 
     function render(container) {
         container.html(template);

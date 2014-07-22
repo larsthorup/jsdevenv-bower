@@ -1,7 +1,7 @@
 define(function (require) {
     var expect = require('chai').expect;
     var $ = require('jquery');
-    var newsfeed = require('lib/newsfeed');
+    var newsfeed = require('newsfeed/newsfeed');
 
     describe('newsfeed', function () {
         it('renders', function () {
