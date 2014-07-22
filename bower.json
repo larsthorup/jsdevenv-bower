@@ -1,0 +1,19 @@
+{
+    "name": "larsthorup-jsdevenv-bower",
+    "version": "0.1.1",
+    "homepage": "https://github.com/larsthorup/jsdevenv-bower",
+    "authors": [
+        "Lars Thorup <lars@zealake.com>"
+    ],
+    "license": "MIT",
+    "dependencies": {
+        "requirejs": "~2.1.14",
+        "requirejs-text": "~2.0.12",
+        "require-css": "~0.1.4",
+        "require-less": "~0.1.2",
+        "jquery": "~2.1.1"
+    },
+    "devDependencies": {
+        "chai": "~1.9.1"
+    }
+}
