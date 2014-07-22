@@ -7,7 +7,7 @@ module.exports = function (grunt) {
     };
 
     // convenience
-    grunt.registerTask('default', []);
+    grunt.registerTask('default', ['cover', 'bundle']);
 
 
     // test
@@ -69,24 +69,18 @@ module.exports = function (grunt) {
         // Note: shared configuration for all bundled modules
         options: {
             baseUrl: 'src',
-            mainConfigFile: 'src/config/require.conf.js',
+            mainConfigFile: 'src/require.conf.js',
             optimize: 'none',
 
             // Note: "css" module not used in production as all css is bundled
-            exclude: ['require-css/normalize'],
-            pragmasOnSave: {
-                excludeRequireCss: true
-            }
+            exclude: ['jquery', 'require-less/normalize', 'require-less/less', 'text']
         },
 
         // Note: bundle the "main" module and every module referenced recursively by it
         module: {
             options: {
-                name: 'app/main',
-                out: 'output/dist/lib/require.js',
-
-                // Note: explicitly include necessary files that are not explicitly referenced
-                include: ['lib/require', 'config/require.conf'],
+                name: 'lib/newsfeed',
+                out: 'output/dist/newsfeed.js',
 
                 // Note: "text" and "less" modules not used in production as all text and css is bundled
                 stubModules: [
@@ -94,20 +88,9 @@ module.exports = function (grunt) {
                     'require-less/less'
                 ]
             }
-        },
-
-        // Note: bundle the "about" module and every module referenced recursively by it
-        about: {
-            options: {
-                name: 'app/home/about/about',
-                out: 'output/dist/app/home/about/about.js',
-
-                // Note: exclude dependent modules already present in main
-                exclude: ['jquery', 'text', 'less']
-            }
         }
     };
-    grunt.registerTask('bundle', ['copy:dist', 'requirejs']);
+    grunt.registerTask('bundle', ['requirejs']);
 
 
     // release
