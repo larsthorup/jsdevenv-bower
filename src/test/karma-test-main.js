@@ -9,7 +9,7 @@ for (var file in window.__karma__.files) {
             var match = /^\/base\/src\/lib\/(.*)\.js$/.exec(file);
             if (match) {
                 // Note: source file (to get correct coverage)
-                dep = 'newsfeed/' + match[1];
+                dep = 'lib/' + match[1];
             }
         }
         if(dep) {

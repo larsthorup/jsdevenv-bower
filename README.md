@@ -16,4 +16,4 @@ Demo:
     npm install bower -g
     npm install
     grunt
-    
+    grunt release
