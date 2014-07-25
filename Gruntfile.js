@@ -7,7 +7,7 @@ module.exports = function (grunt) {
     };
 
     // convenience
-    grunt.registerTask('default', ['cover']);
+    grunt.registerTask('default', ['cover', 'bundle']);
 
 
     // test
@@ -49,7 +49,7 @@ module.exports = function (grunt) {
     gruntConfig.karma.cover = {
         preprocessors: {
             // Note: instrument all code files, but not test files
-            'src/lib/**/*.js': ['coverage']
+            'src/lib/**/!(*test).js': ['coverage']
         },
         reporters: ['progress', 'coverage'],
         browsers: ['PhantomJS'],
@@ -57,6 +57,37 @@ module.exports = function (grunt) {
         singleRun: true
     };
     grunt.registerTask('cover', ['karma:cover']);
+
+
+    // bundle
+    grunt.loadNpmTasks('grunt-contrib-requirejs');
+    gruntConfig.requirejs = {
+
+        // Note: shared configuration for all bundled modules
+        options: {
+            baseUrl: 'src',
+            mainConfigFile: 'src/require.conf.js',
+            optimize: 'none',
+
+            // Note: "css" module not used in production as all css is bundled
+            exclude: ['jquery', 'require-less/normalize', 'require-less/less', 'text']
+        },
+
+        // Note: bundle the "main" module and every module referenced recursively by it
+        module: {
+            options: {
+                name: 'newsfeed/newsfeed',
+                out: 'output/dist/newsfeed.js',
+
+                // Note: "text" and "less" modules not used in production as all text and css is bundled
+                stubModules: [
+                    'text',
+                    'require-less/less'
+                ]
+            }
+        }
+    };
+    grunt.registerTask('bundle', ['requirejs']);
 
 
     // release
@@ -71,7 +102,7 @@ module.exports = function (grunt) {
     gruntConfig.copy = {
         release: { files: [
             { cwd: '.', src: ['bower.json', 'LICENSE'], dest: 'output/release', expand: true },
-            { cwd: 'src', src: ['lib/**/*'], dest: 'output/release', expand: true }
+            { cwd: 'output/dist', src: ['**/*'], dest: 'output/release', expand: true }
         ] }
     };
     grunt.loadNpmTasks('grunt-shell');
@@ -94,6 +125,7 @@ module.exports = function (grunt) {
         'bump-only',
         'shell:cloneRelease',
         'test',
+        'bundle',
         'copy:release',
         'shell:commitRelease',
         'shell:tagRelease',
